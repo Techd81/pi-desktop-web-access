@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="pi-plugin-chrome" content="v3" />
+    <title>Web Access — harness</title>
+    <link rel="stylesheet" href="../views/styles.css" />
+    <script>
+      // Stand-in for the host bridge, so the panel can be opened in a plain
+      // browser (or driven by test/view.test.js) without PI-Desktop.
+      (function () {
+        var availability = {
+          all: true,
+          degoog: true,
+          duckduckgo: true,
+          exa: true,
+          anysearch: true,
+          keenable: true,
+          brave: false,
+          tavily: false,
+          perplexity: false,
+          serper: false,
+          kagi: false,
+          ollama: false,
+          jina: false,
+          you: false,
+          parallel: false,
+          bocha: false,
+          serpapi: false,
+          searchapi: false,
+          tabstack: false,
+          valyu: false,
+          brightdata: false,
+          xai: false,
+          deepseek: false,
+          mistral: false,
+          tinyfish: false,
+          serpdive: false,
+          querit: false,
+          searchinfinity: false,
+          serpbase: false,
+          ceramic: false,
+          cloro: false,
+          outcrawl: false,
+          sofya: false,
+          gemini: false,
+          openai: false,
+          kimi: false,
+          searxng: false,
+          degoogBase: false
+        };
+        var status = {
+          ok: true,
+          pluginId: "pi.web-access",
+          dataDir: "C:\\\\Users\\\\demo\\\\.pi-desktop\\\\plugins\\\\data\\\\pi.web-access",
+          configPath: "C:\\\\Users\\\\demo\\\\.pi-desktop\\\\plugins\\\\data\\\\pi.web-access\\\\web-search.json",
+          legacyPath: null,
+          applied: { legacy: false, settings: ["searchProvider"], secrets: [] },
+          registeredTools: ["web_search", "fetch_content", "get_search_content", "source_check"],
+          enabledTools: ["web_search", "source_check", "fetch_content", "get_search_content"],
+          fetchModes: { defaultMode: "readable", allowedModes: ["readable", "raw", "answer"] },
+          maxInlineContentChars: 30000,
+          allowedProviders: [],
+          resolvedProviders: Object.keys(availability).filter(function (name) {
+            return name !== "all" && name !== "degoogBase";
+          }),
+          credentialPresence: { braveApiKey: false, tavilyApiKey: true },
+          credentialProviders: {
+            brave: "braveApiKey",
+            tavily: "tavilyApiKey",
+            exa: "exaApiKey",
+            kagi: "kagiApiKey"
+          },
+          settings: { searchProvider: "auto", enableWebSearch: true, enableSourceCheck: true }
+        };
+        window.pluginBridge = {
+          invoke: function (channel) {
+            if (channel === "availability") return Promise.resolve({ ok: true, availability: availability });
+            if (channel === "settings:save" || channel === "secret:set" || channel === "advanced:save") {
+              return Promise.resolve(status);
+            }
+            return Promise.resolve(status);
+          }
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <main id="app" class="app"></main>
+    <script src="../views/lib/model.js"></script>
+    <script src="../views/app.js"></script>
+  </body>
+</html>

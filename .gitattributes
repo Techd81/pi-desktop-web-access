@@ -1,0 +1,4 @@
+# The upstream tree and the built bundle are verified byte-for-byte
+# (npm run verify:upstream), so git must store them exactly as they are and
+# never rewrite line endings on checkout.
+* -text

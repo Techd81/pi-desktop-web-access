@@ -1,0 +1,401 @@
+{
+  "note": "Curated by running every upstream test file individually on Windows with Node 24. See docs/PORT-NOTES.md for the categories.",
+  "include": [
+    "all-provider.test.mjs",
+    "auto-empty-fallthrough.test.mjs",
+    "brave-rate-limit.test.mjs",
+    "ceramic-provider.test.mjs",
+    "chrome-cookie-extraction.test.mjs",
+    "cloro-provider.test.mjs",
+    "content-find.test.mjs",
+    "crawl4ai-extraction.test.mjs",
+    "credential-source.test.mjs",
+    "curator-server-timeout.test.mjs",
+    "data-uri-sanitize.test.mjs",
+    "datalab-pdf-extract.test.mjs",
+    "declared-web-links.test.mjs",
+    "deepseek-provider.test.mjs",
+    "degoog-provider.test.mjs",
+    "duckduckgo-provider.test.mjs",
+    "duckduckgo-rate-limit.test.mjs",
+    "endpoint-pdf-extract.test.mjs",
+    "exa-category.test.mjs",
+    "exa-mcp-replies.test.mjs",
+    "exa-search-transport.test.mjs",
+    "extract-cold-deadline.test.mjs",
+    "fetch-content-curl.test.mjs",
+    "fetch-content-domain-policy.test.mjs",
+    "fetch-params.test.mjs",
+    "fetch-routing.test.mjs",
+    "fetch-timeout.test.mjs",
+    "firecrawl-extraction.test.mjs",
+    "gemini-adc-auth.test.mjs",
+    "gemini-api-transport.test.mjs",
+    "gemini-pdf-extract.test.mjs",
+    "gemini-web-cookie-opt-in.test.mjs",
+    "gemini-web-header-overflow.test.mjs",
+    "github-extract.test.mjs",
+    "keenable-provider.test.mjs",
+    "kimi-provider.test.mjs",
+    "mistral-provider.test.mjs",
+    "ninerouter-provider.test.mjs",
+    "offtopic-judge.test.mjs",
+    "openai-origin.test.mjs",
+    "openai-search-opencode-headers.test.mjs",
+    "openai-stream-errors.test.mjs",
+    "outcrawl-provider.test.mjs",
+    "parallel-curator-state.test.mjs",
+    "parallel-mcp-provider.test.mjs",
+    "parallel.test.mjs",
+    "provider-api-url.test.mjs",
+    "provider-base-urls.test.mjs",
+    "provider-gateway-coverage.test.mjs",
+    "proxy-request.test.mjs",
+    "query-cold-abort.test.mjs",
+    "search-error-render.test.mjs",
+    "searchapi-provider.test.mjs",
+    "searchinfinity.test.mjs",
+    "serpapi-provider.test.mjs",
+    "serply-provider.test.mjs",
+    "sofya-provider.test.mjs",
+    "ssrf-allow-ranges-config.test.mjs",
+    "ssrf-protection.test.mjs",
+    "summary-cold-deadline.test.mjs",
+    "summary-instructions.test.mjs",
+    "tabstack-provider.test.mjs",
+    "tavily-key-pool.test.mjs",
+    "tinyfish.test.mjs",
+    "valyu-serper-provider.test.mjs",
+    "web-tool-core.test.mjs",
+    "xai-provider.test.mjs",
+    "xcrawl-provider.test.mjs",
+    "you-provider.test.mjs",
+    "youtube-extract-errors.test.mjs"
+  ],
+  "exclude": [
+    {
+      "file": "auto-summary-source.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "baizhi-provider.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "cloudflare-search-provider.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "codemode-nested-calls.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "codemode-structured-results.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "concurrent-sessions.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "curator-run.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "exa-result-metadata.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "exa-source-label.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "fetch-answer-storage.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "fetch-cache-storage.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "fetch-error-status.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "fetch-modes.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "fetch-not-found-guidance.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "fetch-pdf-answer.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "fetch-redirect-policy.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "fetch-render-call.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "fetch-youtube-answer.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "get-search-content.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "github-issue-pr.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "helper-model-selector.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "mcp-server.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "new-search-providers.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "page-query.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "pdf-config.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "perplexity-timeout.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "provider-argument.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "proxy-transport.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "query-rewrite.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "readme-tool-params.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "rsc-fallback.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "search-routing-weak-results.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "source-check.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "stored-response-id.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "summary-model-scope.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "summary-opencode-session.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "summary-prompt-snippets.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "summary-provider-routing.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "tool-registration-config.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "upgrade-notice.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "virtual-model-nested-calls.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "zai-provider.test.mjs",
+      "reason": "Imports upstream/index.ts (the Pi extension shell) directly; the shell is not part of this port."
+    },
+    {
+      "file": "allowed-search-providers.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "anysearch-provider.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "auth-fetch.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "brightdata-serp.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "brightdata-unlocker.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "config-path.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "curator-fallback.test.mjs",
+      "reason": "Needs upstream README.md, which is documentation rather than source and is not vendored."
+    },
+    {
+      "file": "fetch-answer-continuation.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "fetch-extract.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "fetch-mode-config.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "fetch-multi-answer.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "inline-content-config.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "jina-search.test.mjs",
+      "reason": "Needs upstream README.md, which is documentation rather than source and is not vendored."
+    },
+    {
+      "file": "lazy-extract-load.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "linkup-provider.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "local-video-oversize.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "openai-alpha-search.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "package-typebox-dependency.test.mjs",
+      "reason": "Spawns the npm CLI, which is not on PATH under that name on Windows."
+    },
+    {
+      "file": "pdf-extract.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "provider-credential-source.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "provider-precedence.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "publish-wrapper.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "querit-provider.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "search-providers.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "search-routing.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "search1api.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "serpdive-provider.test.mjs",
+      "reason": "Spawns a child process that exercises upstream/index.ts, the Pi extension shell this port deliberately replaces."
+    },
+    {
+      "file": "tool-activation-sdk.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "tool-activation-version.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "tool-activation.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "tool-arguments.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "tool-definition-size.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "tool-error-flag.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "web-search-answer-render.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "web-search-concurrency.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "web-search-model-override.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "web-search-output-boundary.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "web-search-query-expand.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    },
+    {
+      "file": "web-search-response-id.test.mjs",
+      "reason": "Spawns a child process that imports upstream/index.ts; the published @earendil-works/pi-coding-agent 1.0.4 and its pi-codemode dependency disagree on an export (MCP_TYPESCRIPT_PREAMBLE), so the child exits before its assertion."
+    }
+  ]
+}

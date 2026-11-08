@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "id": "pi.web-access",
+  "name": "Web Access",
+  "version": "0.2.1",
+  "description": "Web search, page and image fetching, stored-content retrieval, source checks, page answers, field extraction, and authenticated fetches for the agent, ported from the pi-web-access extension.",
+  "author": "PI-Desktop port of nicobailon/pi-web-access",
+  "license": "MIT",
+  "homepage": "https://github.com/nicobailon/pi-web-access",
+  "main": "main.js",
+  "engines": {
+    "piDesktop": ">=0.20.1"
+  },
+  "activationEvents": [
+    "onStartup",
+    "onCommand:pi.web-access.open",
+    "onCommand:pi.web-access.results",
+    "onCommand:pi.web-access.settings"
+  ],
+  "permissions": [
+    "ui.view",
+    "agent.tool.register",
+    "net.anyHost",
+    "agent.prompt.inject",
+    "agent.complete",
+    "keyboard.globalShortcut",
+    "shell.openExternal"
+  ],
+  "categories": ["productivity", "developer-tools", "web"],
+  "keywords": ["web", "search", "fetch", "crawl", "research", "web-access"],
+  "ui": {
+    "title": {
+      "en": "Web Access",
+      "zh-CN": "联网访问"
+    },
+    "width": 940,
+    "height": 780,
+    "resizable": true
+  },
+  "contributes": {
+    "views": [
+      {
+        "id": "web-access",
+        "title": {
+          "en": "Web Access",
+          "zh-CN": "联网访问"
+        },
+        "entry": "views/index.html",
+        "order": 60
+      }
+    ],
+    "commands": [
+      {
+        "id": "pi.web-access.open",
+        "title": "Web Access: Open panel",
+        "keywords": ["web", "search", "fetch", "联网"]
+      },
+      {
+        "id": "pi.web-access.results",
+        "title": "Web Access: Stored results",
+        "keywords": ["web", "responseId", "results", "已存"]
+      },
+      {
+        "id": "pi.web-access.settings",
+        "title": "Web Access: Credentials and settings",
+        "keywords": ["web", "credentials", "providers", "设置"]
+      }
+    ],
+    "skills": ["skills/web-search.md"],
+    "agentTools": [
+      {
+        "name": "web_search",
+        "description": "Search the web for sources or answers. Full results are stored for retrieval with get_search_content by responseId. Prefer 2-4 varied queries.",
+        "risk": "medium",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "query": { "type": "string" },
+            "queries": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Run concurrently; vary the angle"
+            },
+            "numResults": { "type": "integer", "minimum": 1, "maximum": 20, "description": "Default 5" },
+            "includeContent": { "type": "boolean", "description": "Also fetch full page content" },
+            "recencyFilter": { "type": "string", "enum": ["day", "week", "month", "year"] },
+            "domainFilter": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Prefix - to exclude"
+            },
+            "category": { "type": "string", "description": "Exa only, e.g. news" },
+            "provider": {
+              "anyOf": [
+                { "type": "string" },
+                { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+              ],
+              "description": "auto, all, a name, or a list of names searched together; omit for the configured default."
+            },
+            "proxy": { "type": "string", "description": "Proxy URL; omit by default; \"\" forces direct" },
+            "model": {
+              "type": "string",
+              "description": "Override the search model for this call as \"provider/id\" (for example \"openai/gpt-4.1-mini\"). Only providers that accept an override honour it."
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "fetch_content",
+        "description": "Fetch web pages, PDFs, GitHub repos, images, and videos. Full content is stored for retrieval with get_search_content by responseId.",
+        "risk": "medium",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "url": { "type": "string" },
+            "urls": { "type": "array", "items": { "type": "string" } },
+            "mode": {
+              "type": "string",
+              "enum": ["readable", "raw", "answer", "extract"],
+              "description": "readable (default): extract readable content as markdown. raw: return the exact textual body using direct HTTP only. answer: answer `prompt` from the fetched page and return the answer instead of the page. extract: pull `fields` out of each fetched page."
+            },
+            "forceClone": { "type": "boolean", "description": "Clone GitHub repos over the size limit" },
+            "proxy": { "type": "string", "description": "Proxy URL; omit by default; \"\" forces direct" },
+            "prompt": {
+              "type": "string",
+              "description": "answer: the question to answer from the page. Video analysis: the instruction for the frames."
+            },
+            "answerModel": {
+              "type": "string",
+              "description": "answer: model as \"provider/model-id\". Defaults to the session model; requires mode answer."
+            },
+            "timestamp": { "type": "string", "description": "Video: where to start, for example \"90\" or \"1:30\"." },
+            "frames": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12,
+              "description": "Video: frames to sample. Used when timestamp is set or frames is above 1."
+            },
+            "model": { "type": "string", "description": "Video: model as \"provider/model-id\" used to analyse the sampled frames." },
+            "auth": {
+              "anyOf": [{ "type": "boolean" }, { "type": "string" }],
+              "description": "Send browser cookies read from the named auth profile; true uses the default profile. Refused with mode answer or extract."
+            },
+            "redirects": { "type": "string", "enum": ["same-origin"], "description": "Refuse a redirect that leaves the origin." },
+            "fields": {
+              "type": "object",
+              "additionalProperties": { "type": "string" },
+              "description": "extract: field name to type, where type is text, number, date, time, datetime, or duration. 1 to 16 fields; requires mode extract."
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "get_search_content",
+        "description": "Page through or search stored content from web_search, source_check, or fetch_content by responseId.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "required": ["responseId"],
+          "properties": {
+            "responseId": { "type": "string" },
+            "query": { "type": "string" },
+            "queryIndex": { "type": "integer", "minimum": 0 },
+            "url": { "type": "string" },
+            "urlIndex": { "type": "integer", "minimum": 0 },
+            "offset": { "type": "integer", "minimum": 0 },
+            "limit": { "type": "integer", "minimum": 1, "description": "Characters, default the maximum" },
+            "findText": {
+              "anyOf": [
+                { "type": "string", "minLength": 1, "maxLength": 500 },
+                {
+                  "type": "array",
+                  "items": { "type": "string", "minLength": 1, "maxLength": 500 },
+                  "minItems": 1,
+                  "maxItems": 10
+                }
+              ],
+              "description": "Find passages instead of paging"
+            },
+            "findMode": { "type": "string", "enum": ["exact", "case-insensitive", "fuzzy"] }
+          },
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "source_check",
+        "description": "Gather cited web passages about a claim for manual review.",
+        "risk": "medium",
+        "schema": {
+          "type": "object",
+          "required": ["claim"],
+          "properties": {
+            "claim": { "type": "string", "description": "Assertion to check" },
+            "queries": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Default: the claim"
+            },
+            "numResults": { "type": "integer", "minimum": 1, "maximum": 20, "description": "Default 5" },
+            "fetchContent": { "type": "boolean", "description": "Fetch top 5 pages for exact passages" },
+            "recencyFilter": { "type": "string", "enum": ["day", "week", "month", "year"] },
+            "domainFilter": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Prefix - to exclude"
+            },
+            "provider": {
+              "anyOf": [
+                { "type": "string" },
+                { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+              ],
+              "description": "auto, all, a name, or a list of names searched together; omit for the configured default."
+            },
+            "proxy": { "type": "string", "description": "Proxy URL; omit by default; \"\" forces direct" }
+          },
+          "additionalProperties": false
+        }
+      }
+    ],
+    "settings": [
+      {
+        "key": "searchProvider",
+        "title": "默认搜索供应商",
+        "type": "string",
+        "default": "auto",
+        "description": "auto 表示自动选择，all 表示把全部可用供应商一起搜，也可填单个供应商名。各家的密钥在「联网访问」面板里填。"
+      },
+      {
+        "key": "autoSummary",
+        "title": "搜索后自动总结",
+        "type": "boolean",
+        "default": false,
+        "description": "打开后会用当前会话模型把搜索结果总结成一段带链接的说明。每次总结会多花一次补全，所以默认关闭。"
+      },
+      {
+        "key": "fetchDefaultMode",
+        "title": "默认抓取模式",
+        "type": "string",
+        "default": "readable",
+        "description": "readable 提取正文，raw 返回原始文本，answer 用会话模型回答页面问题，extract 按字段抽取（需要在调用时提供 fields）。"
+      },
+      {
+        "key": "fetchAllowedModes",
+        "title": "允许的抓取模式",
+        "type": "string",
+        "default": "readable,raw,answer",
+        "description": "用英文逗号分隔，元素取自 readable、raw、answer、extract。extract 会把页面正文发给 Cloudflare，上游默认不含它；加上才允许字段抽取。"
+      },
+      {
+        "key": "maxInlineContentChars",
+        "title": "内联内容字符上限",
+        "type": "number",
+        "default": 30000,
+        "description": "搜索摘要与已存页面共用的输出长度上限。小于 1000 时按上游默认 30000 处理，最大 200000。"
+      },
+      {
+        "key": "proxy",
+        "title": "代理",
+        "type": "string",
+        "description": "抓取网页与调用供应商时使用的代理地址；留空表示直连。"
+      },
+      {
+        "key": "enableWebSearch",
+        "title": "启用联网搜索（web_search）",
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "key": "enableSourceCheck",
+        "title": "启用来源核查（source_check）",
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "key": "enableFetchContent",
+        "title": "启用抓取内容（fetch_content）",
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "key": "enableGetSearchContent",
+        "title": "启用检索已存内容（get_search_content）",
+        "type": "boolean",
+        "default": true
+      }
+    ]
+  },
+  "i18n": {
+    "en": {
+      "name": "Web Access",
+      "description": "Web search, page and image fetching, stored-content retrieval, source checks, page answers, field extraction, and authenticated fetches for the agent, ported from the pi-web-access extension.",
+      "safetyNotes": "Runs the upstream pi-web-access modules unchanged inside the plugin process and calls the open web on the agent's behalf. net.anyHost is declared because a web-access tool must reach whatever host a search provider or a user-supplied URL resolves to. agent.prompt.inject ships one skill that tells the model how to use the tools; it is instructions, not code. agent.complete spends your model quota for fetch_content mode answer, only when you ask for that mode. keyboard.globalShortcut binds Ctrl/Cmd+Shift+Y to open this plugin's own panel command. shell.openExternal opens a stored result link you click. Provider credentials are written only to this plugin's private data directory and never logged. No telemetry."
+    },
+    "zh-CN": {
+      "name": "联网访问",
+      "description": "把 pi-web-access 扩展的联网搜索、网页与图片抓取、结果检索、来源核查、页面问答、字段提取与带登录态抓取能力搬给 Agent。",
+      "safetyNotes": "在插件进程内运行未改动的上游 pi-web-access 模块，并代表 Agent 访问公网。声明 net.anyHost 是因为联网工具必须能访问搜索供应商或用户给出 URL 所在的任意主机。agent.prompt.inject 只提供一份说明如何选用工具的技能文档，是指令不是代码。agent.complete 会在你主动使用 fetch_content 的 answer 模式时消耗你的模型额度。keyboard.globalShortcut 把 Ctrl/Cmd+Shift+Y 绑定到本插件自己的面板命令。shell.openExternal 用于打开你点击的已存结果链接。供应商密钥只写入本插件私有数据目录，从不写日志。无遥测。"
+    }
+  },
+  "safetyNotes": "Runs the upstream pi-web-access modules unchanged and calls the open web on the agent's behalf. net.anyHost is required because provider endpoints and user-supplied URLs are open-world. agent.prompt.inject contributes one instruction skill, agent.complete backs fetch_content mode answer, keyboard.globalShortcut binds one panel command, and shell.openExternal opens a result link the user clicks. Credentials stay in the plugin data directory and are never logged."
+}
