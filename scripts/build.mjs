@@ -30,13 +30,29 @@ const result = buildSync({
   logLevel: "warning",
   legalComments: "none",
   metafile: true,
+  // Three specifiers are redirected to local shims:
+  //
   // `upstream/extract.ts` dynamically imports `resizeImage` from the Pi SDK when
   // a fetched URL is an image. The desktop host does not ship that package, so
   // the specifier resolves to the local shim: without it the import rejects and
   // a direct image can never be returned. Every other use of that specifier in
   // `upstream/` is `import type`, erased before this alias is consulted.
+  //
+  // `upstream/baizhi.ts` and `upstream/zai.ts` lazily import the MCP client for
+  // their hosted search servers. That client drags in `ajv` and two polyfills
+  // that call `Function()`, which the plugin center's fail-closed audit refuses
+  // in any shipped package, so the transport resolves to a stub that reports
+  // both providers as unavailable in this build.
+  //
+  // `upstream/pdf-extract.ts` imports `promise.try` only to call `shim()` so the
+  // PDF reader finds `Promise.try`. That package reaches `es-abstract`,
+  // `call-bind` and `function-bind`, and the last two call `Function()` as well,
+  // so it resolves to a local implementation of the same contract.
   alias: {
     "@earendil-works/pi-coding-agent": join(root, "src", "shims", "pi-coding-agent.ts"),
+    "@modelcontextprotocol/sdk/client/index.js": join(root, "src", "shims", "mcp-client.ts"),
+    "@modelcontextprotocol/sdk/client/streamableHttp.js": join(root, "src", "shims", "mcp-client.ts"),
+    "promise.try": join(root, "src", "shims", "promise-try.ts"),
   },
 });
 

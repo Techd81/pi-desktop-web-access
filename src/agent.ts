@@ -44,7 +44,6 @@ import {
 // config file or the environment only; the three that accepted an
 // `ExtensionContext` are called without one, exactly like upstream's MCP host.
 import { isAnySearchAvailable } from "../upstream/anysearch.ts";
-import { isBaizhiAvailable } from "../upstream/baizhi.ts";
 import { isBochaAvailable } from "../upstream/bocha.ts";
 import { isBraveAvailable } from "../upstream/brave.ts";
 import { isBrightDataAvailable } from "../upstream/brightdata.ts";
@@ -89,7 +88,6 @@ import { isValyuAvailable } from "../upstream/valyu.ts";
 import { isXaiSearchAvailable } from "../upstream/xai-search.ts";
 import { isXcrawlAvailable } from "../upstream/xcrawl.ts";
 import { isYouAvailable } from "../upstream/you.ts";
-import { isZaiAvailable } from "../upstream/zai.ts";
 
 export type ToolRisk = "low" | "medium" | "high";
 
@@ -303,8 +301,13 @@ async function getProviderAvailability(): Promise<ProviderAvailability> {
     valyu: has("valyu") && await probe(() => isValyuAvailable(), false),
     bocha: has("bocha") && await probe(() => isBochaAvailable(), false),
     xcrawl: has("xcrawl") && await probe(() => isXcrawlAvailable(), false),
-    baizhi: has("baizhi") && await probe(() => isBaizhiAvailable(), false),
-    zai: has("zai") && await probe(() => isZaiAvailable(), false),
+    // `baizhi` and `zai` reach their hosted servers through the MCP client
+    // transport, which this build replaces with a stub so the package carries no
+    // `new Function` (see `src/shims/mcp-client.ts`). Their API-key probes would
+    // answer "configured" although every search throws, so both report
+    // unavailable here and the panel matches what a call actually does.
+    baizhi: false,
+    zai: false,
     keenable: has("keenable") && await probe(() => isKeenableAvailable(), false),
     ceramic: has("ceramic") && await probe(() => isCeramicAvailable(), false),
     deepseek: has("deepseek") && await probe(() => isDeepSeekAvailable(), false),

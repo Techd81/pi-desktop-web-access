@@ -173,6 +173,9 @@ pi 扩展与 PI-Desktop 插件互不兼容，但上游内部已经分成了两�
 - **模型补全有配额，插件自己限流。** 宿主允许 8 次 pi.agent.complete/60 秒，而上游对 answer 模式是按 URL 并发（Promise.all），一次多 URL 抓取就能打光整分钟额度并连带拖垮自动总结。插件侧改成 6 次/60 秒滑窗，超额返回「N 秒后重试」的明确错误，而不是让上游包成含糊的单页失败。
 - **runClairic 读的是嵌套凭据。** 上游写 credential?.auth.apiKey，可选链只护住 credential：扁平 { apiKey } 会让 auth 为 undefined，直接抛 TypeError（而不是给「未配置」提示）。适配层用 normalizeProviderAuth 把扁平形状升成上游要的嵌套形状，配好凭据后 extract 才真正走得通。
 - **校验必须发生在写宿主设置之前。** 宿主 setSettings 先落值、插件随后才校验的写法，会让一个上游拒绝的配置留在宿主设置里：之后每次加载都在构建核心时失败，而能改配置的面板本身就在这个插件里，用户无法自救。saveSettings 现在先用 previewConfig 合并校验，通过后才写。
+- **插件中心的打包审计是 fail-closed 的，会拦下 `Function()` 与计算式 `import()`。** 首次 `pack_plugin` 试运行报了 5 个 BLOCKER：`build/agent.cjs` 里三处（`ajv` 的 `new Function`、`function-bind`、`get-intrinsic`），以及 `upstream/abortable.ts`（第 1 行注释里写了 `import()`）和 `upstream/index.ts`（可选 Glimpse 模块用计算式 `import(resolved)`）。前者的来源是 `@modelcontextprotocol/sdk/client/*` 与 `promise.try` 两条依赖链。处理方式：两条 specifier 在构建期指向 `src/shims/mcp-client.ts` 与 `src/shims/promise-try.ts`，`upstream/` 与 `src/` 不再进入发布包——宿主执行的只有 `build/agent.cjs`，源码留在仓库里由标签和 `upstream.lock.json` 固定。改完后 bundle 从 9.54 MB 降到 8.53 MB，本地跑官方 `security_audit.py` 得到 0 blocker / 12 review。
+- **两个供应商因此不可用。** `baizhi` 与 `zai` 走 MCP 客户端传输，占位实现会让它们立刻抛出带 provider 名的不可用错误，而不是静默返回空结果。其余 44 个供应商不受影响，README 与面板都不再声称这两个可用。
+
 
 ## 已知限制
 

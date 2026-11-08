@@ -64,6 +64,8 @@ npm run verify:pack
 
 把 `.piplug` 拖进 **插件 → 安装插件包**。`build/agent.cjs` 已内置全部依赖，包内不含 `node_modules`。
 
+包内只有运行时要用的文件：`manifest.json`、`main.js`、`build/agent.cjs`、`views/`、`skills/`、`docs/PORT-NOTES.md`、`upstream.lock.json`、`README.md`、`LICENSE`。`upstream/` 与 `src/` 留在仓库里，由 `upstream.lock.json` 与发布标签固定；宿主执行的是 `build/agent.cjs`，源码不需要随包。`build/agent.cjs` 已内置全部依赖，包内不含 `node_modules`。
+
 ## 配置与密钥
 
 配置优先级（高到低）：
@@ -111,13 +113,15 @@ npm run verify:pack
 
 ## 供应商支持面
 
-全部 46 个上游供应商都在，没有裁剪：
+上游的 46 个供应商名字都保留在配置与选择列表里，其中 44 个在本构建中可直接使用：
 
-`openai` · `brave` · `parallel` · `parallel-mcp` · `tinyfish` · `search1api` · `searchinfinity` · `querit` · `tavily` · `you` · `firecrawl` · `jina` · `searxng` · `degoog` · `duckduckgo` · `perplexity` · `gemini` · `kimi` · `exa` · `serpdive` · `kagi` · `ollama` · `anysearch` · `xai` · `mistral` · `brightdata` · `serpbase` · `serpapi` · `serper` · `serply` · `valyu` · `bocha` · `xcrawl` · `baizhi` · `zai` · `keenable` · `ceramic` · `deepseek` · `linkup` · `ninerouter` · `cloudflare` · `searchapi` · `outcrawl` · `sofya` · `cloro` · `tabstack`
+`openai` · `brave` · `parallel` · `parallel-mcp` · `tinyfish` · `search1api` · `searchinfinity` · `querit` · `tavily` · `you` · `firecrawl` · `jina` · `searxng` · `degoog` · `duckduckgo` · `perplexity` · `gemini` · `kimi` · `exa` · `serpdive` · `kagi` · `ollama` · `anysearch` · `xai` · `mistral` · `brightdata` · `serpbase` · `serpapi` · `serper` · `serply` · `valyu` · `bocha` · `xcrawl` · `keenable` · `ceramic` · `deepseek` · `linkup` · `ninerouter` · `cloudflare` · `searchapi` · `outcrawl` · `sofya` · `cloro` · `tabstack`
 
 免密钥即可用的是 `degoog`、`duckduckgo`、`exa`、`anysearch`、`keenable`、`parallel-mcp`（以本机实测为准，面板会逐个标出可用性）。其余需要在面板里填对应凭据。
 
 两个例外：`kimi` 只走 Pi 的登录态（上游 MCP 宿主也把它剔除了，桌面端选它会得到 "unknown provider"）；`gemini` 可用 API key，或在本机 Chrome/Edge 登录后开启 `allowBrowserCookies`。
+
+`baizhi` 与 `zai` 走 MCP 客户端传输。插件中心的打包审计拒绝任何携带 `new Function` 的包，而那条客户端会带进 `ajv`、`function-bind`、`get-intrinsic`，所以本构建把该传输指向本地占位实现：选这两个供应商会立刻拿到明确的「不可用」提示，不会静默返回空结果。其余 44 个供应商不受影响。
 
 ## 安全边界
 

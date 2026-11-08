@@ -20,7 +20,7 @@ const artifactName = `${manifest.id}-${manifest.version}.piplug`;
 const artifactPath = join(root, "dist", artifactName);
 
 /** Explicit include list: directories are walked, files are taken as-is. */
-const INCLUDE_DIRS = ["views", "skills", "upstream"];
+const INCLUDE_DIRS = ["views", "skills"];
 const INCLUDE_FILES = [
   "manifest.json",
   "main.js",
@@ -54,14 +54,16 @@ function walk(relativePath, out = []) {
   return out;
 }
 
-// `upstream/test` is a development fixture set; the sources beside it still ship.
+// The package carries the runtime only: `upstream/` and `src/` stay in the
+// repository, pinned by `upstream.lock.json` and the release tag, because the
+// entry runs `build/agent.cjs`. Shipping the TypeScript sources too made the
+// plugin center's audit refuse the package — `upstream/index.ts` loads the
+// optional Glimpse module through a computed `import()` — while adding nothing
+// the host executes.
 function collect() {
   const files = [...INCLUDE_FILES];
   for (const dir of INCLUDE_DIRS) {
-    for (const file of walk(dir)) {
-      if (file.startsWith("upstream/test/")) continue;
-      files.push(file);
-    }
+    for (const file of walk(dir)) files.push(file);
   }
   return [...new Set(files)].sort();
 }
